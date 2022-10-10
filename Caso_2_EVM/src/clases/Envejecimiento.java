@@ -10,9 +10,9 @@ public class Envejecimiento extends Thread {
 
     public void envejecimiento(RAM ram) {
         HashMap<Integer, Integer> bitsram = ram.getHashBITS();
-        for (Integer value: bitsram.values()) {
-            if (value != null) {
-                value = value >> 1;
+        for (Integer valor: bitsram.values()) {
+            if (valor != null) {
+                valor = valor >> 1;
             }
         }
     }
