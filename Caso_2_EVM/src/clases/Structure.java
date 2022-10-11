@@ -1,11 +1,12 @@
+// package clases;
 
-public class Structure {
+// public class Structure {
 	
-	private static int idThread;
+// 	private static int idThread;
 	
-	public synchronized void TanenBaum() {
+// 	public synchronized void TanenBaum() {
 		
 		
-	}
+// 	}
 
-}
+// }

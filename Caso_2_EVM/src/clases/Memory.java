@@ -1,17 +1,18 @@
+// package clases;
 
-public class Memory {
+// public class Memory {
 	
-	private int tamanio;
-	private int cantidadPagina;
-	private int direccionVirtual;
-	private Structure structure;
+// 	private int tamanio;
+// 	private int cantidadPagina;
+// 	private int direccionVirtual;
+// 	private Structure structure;
 	
-	public Memory(int tamanio, int cantidadPagina, int direccionVirtual, Structure structure) {
-		super();
-		this.tamanio = tamanio;
-		this.cantidadPagina = cantidadPagina;
-		this.direccionVirtual = direccionVirtual;
-	}
+// 	public Memory(int tamanio, int cantidadPagina, int direccionVirtual, Structure structure) {
+// 		super();
+// 		this.tamanio = tamanio;
+// 		this.cantidadPagina = cantidadPagina;
+// 		this.direccionVirtual = direccionVirtual;
+// 	}
 
 	
-}
+// }
