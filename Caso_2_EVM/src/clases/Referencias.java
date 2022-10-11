@@ -14,15 +14,23 @@ public class Referencias extends Thread {
         this.env = pEnv;
     }
 
-    public validarReferencias(Integer direccion) {
-        if (this.tlb.contiene(direccion)) {
-            // se imprime el tiempo de busqueda.
-            env.envejecimiento(this.ram);            
+    public synchronized void validarReferencias(Integer direccion) {
+        Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
+        if (estaTLB) {
+            env.envejecimiento();            
         }
         else {
-            Boolean esta = this.tp.getHashTP().get(direccion);
-            if (esta) {
+            Boolean estaTP = this.tp.getHashTP().get(direccion);
+            if (estaTP) {
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                this.env.envejecimiento();
+            }
+            else {
+                System.out.println("Fallo de página.");
+                this.tp.actualizar(direccion);
+                this.ram.actualizar(direccion);
+                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                this.env.envejecimiento();
             }
         }
     }
