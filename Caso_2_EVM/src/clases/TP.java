@@ -21,5 +21,15 @@ public class TP {
     public void actualizar(Integer dir) {
         this.tp.put(dir, true);
     }
+    
+    public Boolean estadoTabla() {
+    	
+    	if (tp.containsValue(true)) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
 
 }

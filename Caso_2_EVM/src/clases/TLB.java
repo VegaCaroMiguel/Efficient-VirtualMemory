@@ -1,4 +1,4 @@
-package clases;
+
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,6 +7,8 @@ import java.util.Random;
 
 public class TLB {
 
+	
+	//HashMap<D_Virtual,D_Real>
     private HashMap<Integer, Integer> tlb = new HashMap<Integer, Integer>();
     private Queue<Integer> fifo = new LinkedList<>();
     private Integer n;

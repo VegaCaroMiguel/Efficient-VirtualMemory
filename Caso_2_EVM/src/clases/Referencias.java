@@ -30,35 +30,59 @@ public class Referencias extends Thread {
     }
 
     public void validarReferencias(Integer direccion) {
+    	
         Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
-        // sumar tiempo traducción TLB
-        this.tempTrad += this.tempTradTLB;
+       
+        
         if (estaTLB) {
+        	
+        	 // sumar tiempo traduccion TLB
+        	this.tempTrad += this.tempTradTLB;
             //System.out.println("traduce TLB");
+        	
         }
         else {
-            Boolean estaTP = this.tp.getHashTP().get(direccion);
-            this.tempTrad += this.tempTradTP;
+            Boolean estaTP = this.tp.estadoTabla();
+            
+            this.tempTrad += this.tempTradTP; 
+            
             if (estaTP) {
                 // sumar tiempo carga TLB
+            	
                 //System.out.println("carga TLB");
+            	
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                
                 // sumar tiempo traducción RAM
-                this.tempTrad += this.tempTradPag;
+                
+                this.tempTrad += this.tempTradPag; //CREEMOS QUE NO
+                
                 //System.out.println("traduce RAM");
+                
             }
             else {
-                this.tempTrad += this.tempFalloPag;
-                //System.out.println("Fallo de página.");
+                this.tempTrad += this.tempFalloPag; //CREEMOS QUE SI
+                
+                //System.out.println("Fallo de pagina.");
+                
                 // sumar tiempo carga TP
+                
                 //System.out.println("carga TP");
+                
                 this.tp.actualizar(direccion);
+                
                 // sumar tiempo carga RAM
+                
                 //System.out.println("carga RAM");
+                
                 this.ram.actualizar(direccion);
+                
                 // sumar tiempo carga TLB
+                
                 //System.out.println("carga TLB");
-                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                
+                this.tlb.actualizar(direccion); // actualizar es algoritmo FIFO!
+                
                 this.tempCarga += this.tempArregloFallPag;
             }
         }
@@ -74,8 +98,8 @@ public class Referencias extends Thread {
             }
             validarReferencias(this.direcciones.get(i));
         }
-        System.out.println("Fin de ejecución.");
-        System.out.println("Tiempo de traducción: " + this.tempTrad + "ns");
+        System.out.println("Fin de ejecucion.");
+        System.out.println("Tiempo de traduccion: " + this.tempTrad + "ns");
         System.out.println("Tiempo de carga: " + this.tempCarga + "ns");
     }
     
