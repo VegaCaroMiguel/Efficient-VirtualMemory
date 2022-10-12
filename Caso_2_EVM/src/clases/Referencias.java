@@ -16,21 +16,18 @@ public class Referencias extends Thread {
 
     public synchronized void validarReferencias(Integer direccion) {
         Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
-        if (estaTLB) {
-            env.envejecimiento();            
+        if (estaTLB) {           
         }
         else {
             Boolean estaTP = this.tp.getHashTP().get(direccion);
             if (estaTP) {
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                this.env.envejecimiento();
             }
             else {
                 System.out.println("Fallo de página.");
                 this.tp.actualizar(direccion);
                 this.ram.actualizar(direccion);
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                this.env.envejecimiento();
             }
         }
     }

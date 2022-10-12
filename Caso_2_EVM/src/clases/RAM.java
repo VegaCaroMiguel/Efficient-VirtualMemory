@@ -8,19 +8,33 @@ public class RAM {
     private HashMap<Integer, Integer> ram = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> bits = new HashMap<Integer, Integer>();
     private Integer n;
+    private Integer ultModDir;
 
     public RAM(Integer pN) {
 
         this.n = pN;
 
-        for (int i = 0; i < pN; i++) {
+        for (int i = 0; i < this.n; i++) {
             ram.put(i, null);
-            bits.put(i, null);
+            bits.put(i, 0);
         }
     }
 
     public HashMap<Integer, Integer> getHashBITS() {
         return this.bits;
+    }
+
+    public synchronized void envejecimiento() {
+        for (Integer valor: this.ram.values()) {
+            if (valor == this.ultModDir) {
+                valor = valor >> 1 ^ 1;
+            }
+            else {
+                valor = valor >> 1;
+            }
+            
+            // ver si está en RAM. Si está se agrega un 1 cuando se corre, sino un 0.
+        }
     }
 
     private Boolean espacio() {
@@ -34,7 +48,7 @@ public class RAM {
         return lleno;
     }
 
-    public void actualizar(Integer direccion) {
+    public void actualizar(Integer dir) {
         Random random = new Random();
         
         Boolean lleno = espacio();
@@ -44,7 +58,8 @@ public class RAM {
             while (i < this.n || centinela) {
                 Integer rand = random.nextInt((this.n - 0) + 1);
                 if (this.ram.get(rand) == null) {
-                    this.ram.put(rand, direccion);
+                    this.ram.put(rand, dir);
+                    this.ultModDir = dir;
                     centinela = false;
                 }
                 i++;
@@ -59,7 +74,8 @@ public class RAM {
                     indice = i;
                 }
             }
-            this.ram.put(indice, direccion); // actualiza el valor del elemento eliminado.
+            this.ram.put(indice, dir); // actualiza el valor del elemento eliminado.
+            this.ultModDir = dir;
         }
     }
         
