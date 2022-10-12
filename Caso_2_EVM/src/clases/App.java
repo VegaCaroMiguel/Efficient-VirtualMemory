@@ -18,6 +18,8 @@ public class App {
 		String archivo = sc.next();
         Integer numMarcosTp = 64;
 
+        sc.close();
+
         ArrayList<Integer> direcciones = new ArrayList<Integer>();
         File file = new File("./Caso_2_EVM/lib/" + archivo + ".txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
