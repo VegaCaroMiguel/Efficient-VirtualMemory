@@ -36,8 +36,8 @@ public class TLB {
     public void actualizar(Integer dir) {
         Random random = new Random();
 
-        Boolean lleno = espacio();
-        if (lleno) {
+        Boolean hayEspacio = espacio();
+        if (hayEspacio) {
             Boolean centinela = true;
             Integer i = 0;
             while (i < this.n || centinela) {
