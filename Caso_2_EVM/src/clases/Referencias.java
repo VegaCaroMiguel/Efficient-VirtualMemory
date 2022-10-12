@@ -48,7 +48,9 @@ public class Referencias extends Thread {
     }
 
     public void run() {
-        validarReferencias();
+        while (true) {
+            validarReferencias();
+        }
     }
     
 }

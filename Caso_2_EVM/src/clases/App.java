@@ -1,29 +1,32 @@
 package clases;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
 
 public class App {
 
-    private static Scanner sc = new Scanner(System.in);
-
+    
     public static void main(String[] args) throws Exception {
-
-        System.out.println("Ingrese el numero de entradas de la TLB");
-		int numEntTlb = sc.nextInt();
-		System.out.println("Ingrese el numero de marcos de pagina en RAM");
-		int numMarcosPag = sc.nextInt();
-		System.out.println("Ingrese el nombre del archivo");
-		String archivo = sc.nextLine();
-
-        // lee un archivo de texto y lo guarda en un arreglo de enteros
-        Integer[] direcciones = new Integer[64];
-        File file = new File("./lib/" + archivo);
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        Scanner sc = new Scanner(System.in);
         
-        for (int i = 0; i < direcciones.length; i++) {
-            direcciones[i] = Integer.parseInt(br.readLine());
+        System.out.println("Ingrese el numero de entradas de la TLB:");
+		int numEntTlb = sc.nextInt();
+		System.out.println("Ingrese el numero de marcos de pagina en RAM:");
+		int numMarcosPag = sc.nextInt();
+		System.out.println("Ingrese el nombre del archivo (no incluya el .txt):");
+		String archivo = sc.next();
+
+        ArrayList<Integer> direcciones = new ArrayList<Integer>();
+        File file = new File("./Caso_2_EVM/lib/" + archivo + ".txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String cada_direccion;
+        while ((cada_direccion = br.readLine()) != null) {
+            direcciones.add(Integer.parseInt(cada_direccion));
         }
+
+        br.close();
 
         TLB tlb = new TLB(numEntTlb);
         RAM ram = new RAM(numMarcosPag);
@@ -33,8 +36,8 @@ public class App {
 
         referencias.start();
         
-        for (int i = 0; i < direcciones.length; i++) {
-            referencias.setDireccion(direcciones[i]);
+        for (int i = 0; i < direcciones.size(); i++) {
+            referencias.setDireccion(direcciones.get(i));
         }
     }
 

@@ -15,7 +15,9 @@ public class Envejecimiento extends Thread {
     }
 
     public void run() {
-        envejecimiento();
+        while (true) {
+            envejecimiento();
+        }
     }
 
 
