@@ -16,6 +16,7 @@ public class App {
 		int numMarcosPag = sc.nextInt();
 		System.out.println("Ingrese el nombre del archivo (no incluya el .txt):");
 		String archivo = sc.next();
+        Integer numMarcosTp = 64;
 
         ArrayList<Integer> direcciones = new ArrayList<Integer>();
         File file = new File("./Caso_2_EVM/lib/" + archivo + ".txt");
@@ -25,20 +26,19 @@ public class App {
         while ((cada_direccion = br.readLine()) != null) {
             direcciones.add(Integer.parseInt(cada_direccion));
         }
-
         br.close();
 
         TLB tlb = new TLB(numEntTlb);
-        RAM ram = new RAM(numMarcosPag);
-        TP tp = new TP(64);
-        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram);
-        Referencias referencias = new Referencias(tlb, ram, tp);
-
-        referencias.start();
         
-        for (int i = 0; i < direcciones.size(); i++) {
-            referencias.setDireccion(direcciones.get(i));
-        }
+        RAM ram = new RAM(numMarcosPag);
+
+        TP tp = new TP(numMarcosTp);
+        
+        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram);
+        envejecimiento.start();
+        
+        Referencias referencias = new Referencias(tlb, ram, tp, direcciones);
+        referencias.start();
     }
 
 

@@ -22,7 +22,7 @@ public class TLB {
         return this.tlb;
     }
 
-    private Boolean espacio() {
+    private synchronized Boolean espacio() {
         Boolean lleno = false;
         for (int i = 0; i < this.n; i++) {
             if (this.tlb.get(i) == null) {
@@ -33,7 +33,7 @@ public class TLB {
         return lleno;
     }
 
-    public void actualizar(Integer dir) {
+    public synchronized void actualizar(Integer dir) {
         Random random = new Random();
 
         Boolean hayEspacio = espacio();

@@ -32,12 +32,10 @@ public class RAM {
             else {
                 valor = valor >> 1;
             }
-            
-            // ver si está en RAM. Si está se agrega un 1 cuando se corre, sino un 0.
         }
     }
 
-    private Boolean espacio() {
+    private synchronized Boolean espacio() {
         Boolean lleno = false;
         for (int i = 0; i < this.n; i++) {
             if (this.ram.get(i) == null) {
@@ -48,7 +46,7 @@ public class RAM {
         return lleno;
     }
 
-    public void actualizar(Integer dir) {
+    public synchronized void actualizar(Integer dir) {
         Random random = new Random();
         
         Boolean lleno = espacio();
