@@ -41,8 +41,6 @@ public class App {
         
         Referencias referencias = new Referencias(tlb, ram, tp, direcciones);
         referencias.start();
+        
     }
-
-
-    
 }
