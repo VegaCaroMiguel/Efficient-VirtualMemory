@@ -5,47 +5,50 @@ public class Referencias extends Thread {
     private TLB tlb;
     private RAM ram;
     private TP tp;
-    private Envejecimiento env;
+    private Integer direccion;
 
-    public Referencias(TLB pTlb, RAM pRam, TP pTp, Envejecimiento pEnv) {
+    public Referencias(TLB pTlb, RAM pRam, TP pTp) {
         this.tlb = pTlb;
         this.ram = pRam;
         this.tp = pTp;
-        this.env = pEnv;
     }
 
-    public synchronized void validarReferencias(Integer direccion) {
-        Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
-        if (estaTLB) {           
+    public void setDireccion(Integer pDir) {
+        this.direccion = pDir;
+    }
+
+    public void validarReferencias() {
+        try {
+            sleep(2);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Boolean estaTLB = this.tlb.getHashTLB().containsValue(this.direccion);
+        if (estaTLB) {
+            // sumar tiempo traducción TLB
         }
         else {
-            Boolean estaTP = this.tp.getHashTP().get(direccion);
+            Boolean estaTP = this.tp.getHashTP().get(this.direccion);
             if (estaTP) {
-                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                // sumar tiempo carga TLB
+                this.tlb.actualizar(this.direccion); // ¡actualizar es algoritmo FIFO!
             }
             else {
                 System.out.println("Fallo de página.");
-                this.tp.actualizar(direccion);
-                this.ram.actualizar(direccion);
-                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                // sumar tiempo carga TP
+                this.tp.actualizar(this.direccion);
+                // sumar tiempo carga RAM
+                this.ram.actualizar(this.direccion);
+                // sumar tiempo carga TLB
+                this.tlb.actualizar(this.direccion); // ¡actualizar es algoritmo FIFO!
             }
         }
     }
 
     public void run() {
-        /*
-         * if está en TLB
-         *  todo bien
-         * else
-         *  ver en TP si está en RAM
-         *  if está en RAM
-         *    actualizar TLB
-         *  else
-         *    fallo de página
-         *    actualizar TP
-         *    actualizar RAM
-         *    actualizar TLB
-         */
+        validarReferencias();
     }
     
 }
