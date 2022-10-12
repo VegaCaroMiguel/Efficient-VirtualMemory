@@ -21,7 +21,7 @@ public class App {
         sc.close();
 
         ArrayList<Integer> direcciones = new ArrayList<Integer>();
-        File file = new File("./Caso_2_EVM/lib/" + archivo + ".txt");
+        File file = new File("./Caso_2_EVM/lib/" + "ej_Baja_64paginas" + ".txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String cada_direccion;
@@ -36,11 +36,11 @@ public class App {
 
         TP tp = new TP(numMarcosTp);
         
-        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram);
+        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram, direcciones);
         envejecimiento.start();
         
         Referencias referencias = new Referencias(tlb, ram, tp, direcciones);
         referencias.start();
-        
+
     }
 }

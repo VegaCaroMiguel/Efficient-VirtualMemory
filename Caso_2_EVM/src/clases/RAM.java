@@ -23,16 +23,9 @@ public class RAM {
     public HashMap<Integer, Integer> getHashBITS() {
         return this.bits;
     }
-
-    public synchronized void envejecimiento() {
-        for (Integer valor: this.ram.values()) {
-            if (valor == this.ultModDir) {
-                valor = valor >> 1 ^ 1;
-            }
-            else {
-                valor = valor >> 1;
-            }
-        }
+    
+    public Integer getUltModDir() {
+        return this.ultModDir;
     }
 
     private synchronized Boolean espacio() {
