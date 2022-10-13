@@ -1,7 +1,6 @@
 package clases;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Referencias extends Thread {
 
@@ -31,34 +30,26 @@ public class Referencias extends Thread {
 
     public void validarReferencias(Integer direccion) {
         Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
-        // sumar tiempo traducción TLB
-        this.tempTrad += this.tempTradTLB;
         if (estaTLB) {
-            //System.out.println("traduce TLB");
+            this.tempTrad += this.tempTradTLB;
         }
         else {
             Boolean estaTP = this.tp.getHashTP().get(direccion);
             this.tempTrad += this.tempTradTP;
             if (estaTP) {
-                // sumar tiempo carga TLB
-                //System.out.println("carga TLB");
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                // sumar tiempo traducción RAM
+                
                 this.tempTrad += this.tempTradPag;
-                //System.out.println("traduce RAM");
             }
             else {
                 this.tempTrad += this.tempFalloPag;
-                //System.out.println("Fallo de página.");
-                // sumar tiempo carga TP
-                //System.out.println("carga TP");
+
                 this.tp.actualizar(direccion);
-                // sumar tiempo carga RAM
-                //System.out.println("carga RAM");
+                
                 this.ram.actualizar(direccion);
-                // sumar tiempo carga TLB
-                //System.out.println("carga TLB");
+                
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                
                 this.tempCarga += this.tempArregloFallPag;
             }
         }
@@ -72,11 +63,16 @@ public class Referencias extends Thread {
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            this.ram.setActDir(direcciones.get(i));
             validarReferencias(this.direcciones.get(i));
+            System.out.println("ant: " + this.ram.getAntDir());
+            this.ram.getUltDir();
         }
         System.out.println("Fin de ejecución.");
-        System.out.println("Tiempo de traducción: " + this.tempTrad + "ns");
-        System.out.println("Tiempo de carga: " + this.tempCarga + "ns");
+        System.out.println("Tiempo de traducción: " + this.tempTrad + " ns");
+        System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
+        this.ram.loopRAM();
+        this.ram.loopBITS();
     }
     
 }

@@ -15,15 +15,8 @@ public class Envejecimiento extends Thread {
     }
 
     public void envejecimiento() {
-        this.ultModDir = this.ram.getUltModDir();
-        for (Integer valor: this.ram.getHashBITS().values()) {
-            if (valor == this.ultModDir) {
-                valor = valor << 1 ^ 1;
-            }
-            else {
-                valor = valor << 0 ^ 1;
-            }
-        }
+        this.ram.envejecimiento();
+
     }
 
     public void run() {

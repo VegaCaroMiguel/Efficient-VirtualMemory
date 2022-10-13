@@ -1,6 +1,7 @@
 package clases;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.io.*;
 
@@ -29,7 +30,7 @@ public class App {
             direcciones.add(Integer.parseInt(cada_direccion));
         }
         br.close();
-
+        
         TLB tlb = new TLB(numEntTlb);
         
         RAM ram = new RAM(numMarcosPag);

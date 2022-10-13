@@ -4,22 +4,23 @@ import java.util.HashMap;
 
 public class TP {
     
-    private HashMap<Integer, Boolean> tp = new HashMap<Integer, Boolean>();
+    private static HashMap<Integer, Boolean> tp = new HashMap<Integer, Boolean>();
     // true es que está en RAM, false es que está en disco.
+    private Integer n;
 
     public TP(Integer pN) {
-
-        for (int i = 0; i < pN; i++) {
+        this.n = pN;
+        for (int i = 0; i < this.n; i++) {
             tp.put(i, false);
         }
     }
 
     public HashMap<Integer, Boolean> getHashTP() {
-        return this.tp;
+        return tp;
     }
 
-    public void actualizar(Integer dir) {
-        this.tp.put(dir, true);
+    public synchronized void actualizar(Integer dir) {
+        tp.put(dir, true);
     }
 
 }
