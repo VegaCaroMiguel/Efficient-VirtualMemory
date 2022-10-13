@@ -1,6 +1,4 @@
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.io.*;
 
@@ -21,7 +19,7 @@ public class App {
         sc.close();
 
         ArrayList<Integer> direcciones = new ArrayList<Integer>();
-        File file = new File("./Caso_2_EVM/lib/" + "ej_Baja_64paginas" + ".txt");
+        File file = new File("./lib/" + "ej_Baja_64paginas" + ".txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String cada_direccion;
