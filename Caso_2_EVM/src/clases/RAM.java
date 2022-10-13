@@ -1,4 +1,3 @@
-package clases;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,6 +107,5 @@ public class RAM {
             referenciadas.add(dir);
             ultModDir = dir;
         }
-    }
-        
+    }  
 }
