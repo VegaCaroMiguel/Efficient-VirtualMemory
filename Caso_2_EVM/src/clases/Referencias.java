@@ -29,13 +29,16 @@ public class Referencias extends Thread {
     }
 
     public void validarReferencias(Integer direccion) {
+    	
         Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
         if (estaTLB) {
             this.tempTrad += this.tempTradTLB;
         }
         else {
-            Boolean estaTP = this.tp.getHashTP().get(direccion);
-            this.tempTrad += this.tempTradTP;
+            Boolean estaTP = this.tp.estadoTabla();
+            
+            this.tempTrad += this.tempTradTP; 
+            
             if (estaTP) {
                 this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
                 
