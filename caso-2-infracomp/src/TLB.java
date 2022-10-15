@@ -1,11 +1,14 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class TLB {
 
     private static HashMap<Integer, Integer> tlb = new HashMap<Integer, Integer>();
-    private static Queue<Integer> fifo = new LinkedList<>();
+    //private static Queue<Integer> fifo = new LinkedList<>();
+    private static List<Integer> fifo = new ArrayList<Integer>();
     private Integer n;
 
     public TLB(Integer pN) {
@@ -47,16 +50,15 @@ public class TLB {
      */
     public synchronized void actualizar(Integer dir, Boolean estadoRAM, Integer dirVieja) {
         Boolean hayEspacio = espacio();
-        if (!estadoRAM) {
-            for (int i = 0; i < fifo.size(); i++) {
-                if (fifo.contains(dirVieja)) {
-                    //fifo.poll();
-                    fifo.remove(dirVieja);
-                }
-            }
-            tlb.remove(dirVieja);
-        }
+        Integer cabeza = null;
         if (hayEspacio) {
+            if (!estadoRAM) {
+                if (fifo.contains(dirVieja)) {
+                    int index = fifo.indexOf(dirVieja);
+                    cabeza = fifo.remove(index);
+                }
+                tlb.remove(dirVieja);
+            }
             for (int i = 0; i < this.n; i++) {
                 if (tlb.get(i) == null) {
                     tlb.put(i, dir);
@@ -66,7 +68,16 @@ public class TLB {
             }
         }
         else {
-            Integer cabeza = fifo.poll(); // ver y eliminar el elemento del tope de la linked list.
+            if (!estadoRAM) {
+                if (fifo.contains(dirVieja)) {
+                    int index = fifo.indexOf(dirVieja);
+                    cabeza = fifo.remove(index);
+                }
+                tlb.remove(dirVieja);
+            }
+            else { 
+                cabeza = fifo.remove(0); // ver y eliminar el elemento del tope de la linked list.
+            }
             tlb.put(cabeza, dir); // actualiza el valor del elemento eliminado.
             fifo.add(cabeza); // vuelve a meter la dirección a la cola.
         }

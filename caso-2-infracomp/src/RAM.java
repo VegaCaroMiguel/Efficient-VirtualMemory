@@ -102,7 +102,10 @@ public class RAM {
                 Integer valor = bits.get(i);
                 valor = valor >> 1;
                 if (Referencias.referenciadas.contains(i)) {
-                    valor = valor ^ 1;
+                    //valor = valor ^ 1;
+                    // String s = "1" + Integer.toBinaryString(valor);
+                    // valor = Integer.parseInt(s, 2);
+                    valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
                 }
                 bits.put(i, valor);
             }

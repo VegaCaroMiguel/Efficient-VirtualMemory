@@ -46,6 +46,12 @@ public class App {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // Integer c = 1;
+        // c = c >> 1;
+        // //String s = "1" + Integer.toBinaryString(c);
+        // //System.out.println(Integer.parseInt(s, 2));
+        // System.out.println(Integer.toBinaryString(c));
     }
 
 }

@@ -76,6 +76,12 @@ public class Referencias extends Thread {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
             //System.out.println(i);
+            // this.ram.loopRAM();
+            // System.out.println("\n");
+            // this.ram.loopBITS();
+            // System.out.println("\n");
+            // this.tlb.loopTLB();
+            // System.out.println("\n");
             try {
                 sleep(2);
             }
@@ -88,12 +94,12 @@ public class Referencias extends Thread {
         System.out.println("Fallos de página: " + this.numFallosPagina);
         System.out.println("Tiempo de traducción: " + this.tempTrad + " ns");
         System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
-        //this.ram.loopRAM();
-        //System.out.println("\n");
-        //this.ram.loopBITS();
-        //System.out.println("\n");
-        //this.tlb.loopTLB();
-        //System.out.println("\n");
+        // this.ram.loopRAM();
+        // System.out.println("\n");
+        // this.ram.loopBITS();
+        // System.out.println("\n");
+        // this.tlb.loopTLB();
+        // System.out.println("\n");
         //this.tp.loopTP();
     }
     
