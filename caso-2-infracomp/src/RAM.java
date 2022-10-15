@@ -71,11 +71,11 @@ public class RAM {
             for (int i = 0; i < this.n; i++) {
                 Integer valor = bits.get(i);
                 valor = valor >> 1;
-                if (Referencias.referenciadas.contains(i)) {
+                if (Referencias.referenciadas.contains(i) && Integer.toBinaryString(valor).length() < 32) {
                     //valor = valor ^ 1;
-                    // String s = "1" + Integer.toBinaryString(valor);
-                    // valor = Integer.parseInt(s, 2);
-                    valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
+                    //String s = "1" + Integer.toBinaryString(valor);
+                    //valor = Integer.parseInt(s, 2);
+                    valor = valor + (int) Math.pow(2, 32); // 2^30 es sumarle 1 a la izquierda.
                 }
                 bits.put(i, valor);
             }
@@ -113,14 +113,13 @@ public class RAM {
             for (int i = 0; i < this.n; i++) {
                 if (ram.get(i) == null) {
                     ram.put(i, dir);
-                    bits.put(dir, 0);
+                    bits.put(i, 0);
                     ultModDir = dir;
                     break;
                 }
             }
         }
         else {
-            //tamanioIgual();
             Integer menor = Integer.MAX_VALUE;
             Integer indice = 0;
             for (int i = 0; i < this.n; i++) {
@@ -131,7 +130,7 @@ public class RAM {
             }
             dirVieja = ram.get(indice);
             ram.put(indice, dir); // actualiza el valor del elemento eliminado.
-            bits.put(dir, 0); // actualiza y reinicia el bitstring del elemento eliminado.
+            bits.put(indice, 0); // actualiza y reinicia el bitstring del elemento eliminado.
         }
 
         return dirVieja;

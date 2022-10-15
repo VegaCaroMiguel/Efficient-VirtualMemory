@@ -3,12 +3,10 @@ import java.util.ArrayList;
 public class Envejecimiento extends Thread {
     
     private RAM ram;
-    private ArrayList<Integer> direcciones;
     public static Boolean env = true;
 
-    public Envejecimiento(Integer pN, RAM pRam, ArrayList<Integer> pDirecciones) {
+    public Envejecimiento(Integer pN, RAM pRam) {
         this.ram = pRam;
-        this.direcciones = pDirecciones;
     }
 
     /**

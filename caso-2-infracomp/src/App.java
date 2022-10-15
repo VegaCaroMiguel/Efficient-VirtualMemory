@@ -33,7 +33,7 @@ public class App {
 
         TP tp = new TP(numMarcosTp);
         
-        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram, direcciones);
+        Envejecimiento envejecimiento = new Envejecimiento(numMarcosPag, ram);
         envejecimiento.start();
         
         Referencias referencias = new Referencias(tlb, ram, tp, direcciones);
@@ -48,8 +48,7 @@ public class App {
 
         // Integer c = 1;
         // c = c >> 1;
-        // //String s = "1" + Integer.toBinaryString(c);
-        // //System.out.println(Integer.parseInt(s, 2));
+        // c = c + (int) Math.pow(2, 32);
         // System.out.println(Integer.toBinaryString(c));
     }
 

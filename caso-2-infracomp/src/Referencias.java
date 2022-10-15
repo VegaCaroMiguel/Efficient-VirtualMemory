@@ -92,6 +92,10 @@ public class Referencias extends Thread {
     public void run() {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
+            this.ram.loopRAM();
+            System.out.println("\n");
+            this.tlb.loopTLB();
+            System.out.println("\n");
             try {
                 sleep(2);
             }
@@ -106,10 +110,10 @@ public class Referencias extends Thread {
         System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
         this.ram.loopRAM();
         System.out.println("\n");
-        this.ram.loopBITS();
-        System.out.println("\n");
         this.tlb.loopTLB();
         System.out.println("\n");
+        // this.ram.loopBITS();
+        // System.out.println("\n");
         //this.tp.loopTP();
     }
     
