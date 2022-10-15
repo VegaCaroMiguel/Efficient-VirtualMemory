@@ -11,15 +11,16 @@ public class Envejecimiento extends Thread {
         this.direcciones = pDirecciones;
     }
 
+    /**
+     * Llama la función "envejecimiento" de la RAM.
+     */
     public void envejecimiento() {
         this.ram.envejecimiento();
-
     }
 
     public void run() {
         while (env) {
             envejecimiento();
-            //System.out.println("envejece");
             try {
                 sleep(1);
             }

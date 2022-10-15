@@ -29,24 +29,33 @@ public class TLB {
         }
     }
 
+    /**
+     * Revisa si la TLB tiene espacio o no.
+     * 
+     * @return hayEspacio : false si la TLB esta llena, true si no lo esta.
+     */
     private synchronized Boolean espacio() {
-        Boolean lleno = false;
+        Boolean hayEspacio = false;
         for (int i = 0; i < this.n; i++) {
             if (tlb.get(i) == null) {
-                lleno = true;
+                hayEspacio = true;
             }
         }
 
-        return lleno;
+        return hayEspacio;
     }
 
     /**
-     * Actualiza la TLB, si hay espacio, agrega la dirección de la página a la TLB,
+     * Actualiza la TLB. Si hay espacio, agrega la dirección de la página a la TLB,
      * sino, sigue el algoritmo de reemplazo FIFO.
+     * El "if (!estadoRAM)", cuando la RAM no tiene espacio y reemplaza una página,
+     * se saca la pagina que se reemplazó en la RAM de la TLB y de FIFO
+     * (ya sé que es no es buena práctica dejar el mismo if dos veces en la misma función,
+     * pero así sincroniza la TLB y FIFO con la RAM bien).
      * 
-     * @param dir
+     * @param dir : dirección actual que se quiere cargar.
      * @param estadoRAM : true si RAM tiene espacio, falso si no.
-     * @param dirVieja
+     * @param dirVieja : dirección de la página que se acaba de reemplazar en RAM (si es el caso).
      */
     public synchronized void actualizar(Integer dir, Boolean estadoRAM, Integer dirVieja) {
         Boolean hayEspacio = espacio();

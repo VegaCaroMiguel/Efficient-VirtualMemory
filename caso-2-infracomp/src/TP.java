@@ -23,6 +23,16 @@ public class TP {
         }
     }
 
+    /**
+     * Actualiza la TP. Si la dirección está en RAM, la actualiza a true. Si está en
+     * disco, la actualiza a false.
+     * En caso de que la RAM no tenga espacio y haya reemplazado alguna página, se
+     * actualiza la TP, dejando en false la página que se sacó de la RAM.
+     * 
+     * @param dir
+     * @param estadoRAM
+     * @param dirVieja
+     */
     public synchronized void actualizar(Integer dir, Boolean estadoRAM, Integer dirVieja) {
         if (estadoRAM) {
             tp.put(dir, true);

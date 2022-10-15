@@ -60,41 +60,11 @@ public class RAM {
     }
 
     /**
-     * Recorre el HashMap de bits y retorna el indice de la posicion con el bitstring mas largo.
-     * 
-     * @return the espacio
+     * Ejecuta el algoritmo de envejecimiento.
+     * Recorre la tabla de Hash de bits y hace un corrimiento a la derecha
+     * de cada secuencia de bits. El menor valor en Integer que se encuentre
+     * es el que se debe sacar en caso de que no haya espacio en RAM.
      */
-    public Integer longestBitString() {
-        Integer max = 0;
-        for (int i = 0; i < this.n; i++) {
-            String bitsString = Integer.toBinaryString(bits.get(i));
-            if (bitsString.length() > max) {
-                max = bits.get(i);
-            }
-        }
-        return max;
-    }
-
-    /**
-     * Recorre y modifica el HashMap de bits, asegurándose de que todas las cadenas sean de la misma longitud.
-     * Esto, para que la evaluación de mayor y menor sea cierta.
-     */
-    public synchronized void tamanioIgual() {
-        Integer max = longestBitString();
-        for (int i = 0; i < bits.size(); i++) {
-            Integer valor = bits.get(i);
-            int j = 0;
-            Integer faltante = max - (Integer.toBinaryString(valor).length());
-            if (faltante != 0 && valor != 0) {
-                while (j < faltante) {
-                    valor = valor << 1;
-                    j++;
-                }
-                bits.put(i, valor);
-            }
-        }
-    }
-
     public void envejecimiento() {
         synchronized(Referencias.referenciadas) {
             //System.out.println("Envejecimiento");
@@ -113,6 +83,11 @@ public class RAM {
         }
     }
 
+    /**
+     * Revisa si la RAM tiene espacio o no.
+     * 
+     * @return hayEspacio : false si la TLB esta llena, true si no lo esta.
+     */
     public Boolean espacio() {
         Boolean lleno = false;
         for (int i = 0; i < this.n; i++) {
@@ -124,6 +99,13 @@ public class RAM {
         return lleno;
     }
 
+    /**
+     * Actualiza la RAM. Si hay espacio, agrega la dirección de la página a la RAM,
+     * sino, busca el menor valor en la tabla de Hash de bits y lo reemplaza por el nuevo.
+     * 
+     * @param dir : dirección actual que se quiere cargar.
+     * @return dirVieja : dirección que se reemplazó.
+     */
     public synchronized Integer actualizar(Integer dir) {      
         Integer dirVieja = null; 
         Boolean hayEspacio = espacio();
@@ -144,7 +126,7 @@ public class RAM {
             for (int i = 0; i < this.n; i++) {
                 if (bits.get(i) < menor) {
                     menor = bits.get(i); // busca cuál es el menor. El Integer menor es el menos usado hasta es momento.
-                    indice = i;
+                    indice = i; // guarda el índice del menor.
                 }
             }
             dirVieja = ram.get(indice);

@@ -28,21 +28,39 @@ public class Referencias extends Thread {
         this.direcciones = pDirecciones; // mark down
     }
 
+    /**
+     * Sigue el if del algoritmo de búsqueda de página cuando se tiene TLB.
+     * Básicamente, sigue:
+     * if (está en TLB) {
+     *    *nice*
+     * }
+     * else {
+     *    if (está en RAM) {
+     *       actualizar TLB
+     *    }
+     *    else {
+     *       actualizar RAM
+     *       actualizar TP
+     *       actualizar TLB
+     *    }
+     * }
+     * 
+     * @param direccion
+     */
     public void validarReferencias(Integer direccion) {
+        
         synchronized(referenciadas) {
-            //System.out.println("Referencias");
             Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
-            if (estaTLB) {
-                //System.out.println("Esta en TLB");
+            
+            if (estaTLB) { // ¿Está en TLB?
                 this.tempTrad += this.tempTradTLB;
                 this.tempCarga += this.tempTradTLB;
             }
             else {
-                //System.out.println("No esta en TLB");
                 Boolean estaTP = this.tp.getHashTP().get(direccion);
                 Boolean estaRAM = this.ram.getHashRAM().containsValue(direccion);
                 
-                if (estaTP && estaRAM) {
+                if (estaTP && estaRAM) { // ¿Está en RAM?
                     this.tempTrad += this.tempTradTP;
                     this.tempCarga += this.tempTradTP;
 
@@ -51,12 +69,12 @@ public class Referencias extends Thread {
                     this.tempTrad += this.tempTradPag;
                     this.tempCarga += this.tempTradPag;
                 }
-                else {
-                    //System.out.println("Fallo de página");
+                else { // Aseguradito no está en RAM.
                     this.numFallosPagina++;
+
                     Boolean hayEspacioRAM = this.ram.espacio();
                     Integer dirVieja = this.ram.actualizar(direccion);
-                    //System.out.println("No esta en RAM");
+                    
                     this.tempTrad += this.tempFalloPag;
                     this.tempCarga += this.tempFalloPag;
 
@@ -68,20 +86,12 @@ public class Referencias extends Thread {
                 }
             }
             referenciadas.add(direccion);
-            //this.ram.setReferenciadas(referenciadas);
         }
     }
 
     public void run() {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
-            //System.out.println(i);
-            // this.ram.loopRAM();
-            // System.out.println("\n");
-            // this.ram.loopBITS();
-            // System.out.println("\n");
-            // this.tlb.loopTLB();
-            // System.out.println("\n");
             try {
                 sleep(2);
             }
@@ -94,12 +104,12 @@ public class Referencias extends Thread {
         System.out.println("Fallos de página: " + this.numFallosPagina);
         System.out.println("Tiempo de traducción: " + this.tempTrad + " ns");
         System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
-        // this.ram.loopRAM();
-        // System.out.println("\n");
-        // this.ram.loopBITS();
-        // System.out.println("\n");
-        // this.tlb.loopTLB();
-        // System.out.println("\n");
+        this.ram.loopRAM();
+        System.out.println("\n");
+        this.ram.loopBITS();
+        System.out.println("\n");
+        this.tlb.loopTLB();
+        System.out.println("\n");
         //this.tp.loopTP();
     }
     
