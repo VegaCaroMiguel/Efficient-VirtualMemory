@@ -72,8 +72,8 @@ public class Referencias extends Thread {
                 else { // Aseguradito no está en RAM.
                     this.numFallosPagina++;
 
-                    Boolean hayEspacioRAM = this.ram.espacio();
                     Integer dirVieja = this.ram.actualizar(direccion);
+                    Boolean hayEspacioRAM = this.ram.espacio();
                     
                     this.tempTrad += this.tempFalloPag;
                     this.tempCarga += this.tempFalloPag;
@@ -86,16 +86,27 @@ public class Referencias extends Thread {
                 }
             }
             referenciadas.add(direccion);
+            for (int i = 0; i < this.ram.getHashRAM().size(); i++) {
+                Integer valor = this.ram.getHashRAM().get(i);
+                if (valor.equals(direccion)) {
+                    valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
+                    //valor = valor ^ 1;
+                    //String s = "1" + Integer.toBinaryString(valor);
+                    //valor = Integer.parseInt(s, 2);
+                    break;
+                }
+            }
         }
     }
 
     public void run() {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
-            this.ram.loopRAM();
-            System.out.println("\n");
-            this.tlb.loopTLB();
-            System.out.println("\n");
+            this.tempTrad -= 3;
+            // this.ram.loopRAM();
+            // System.out.println("\n");
+            // this.tlb.loopTLB();
+            // System.out.println("\n");
             try {
                 sleep(2);
             }
@@ -112,6 +123,8 @@ public class Referencias extends Thread {
         System.out.println("\n");
         this.tlb.loopTLB();
         System.out.println("\n");
+        // this.tlb.loopFIFO();
+        // System.out.println("\n");
         // this.ram.loopBITS();
         // System.out.println("\n");
         //this.tp.loopTP();

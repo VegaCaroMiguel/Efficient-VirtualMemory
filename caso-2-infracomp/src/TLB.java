@@ -3,12 +3,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 public class TLB {
 
-    private static HashMap<Integer, Integer> tlb = new HashMap<Integer, Integer>();
-    //private static Queue<Integer> fifo = new LinkedList<>();
-    private static List<Integer> fifo = new ArrayList<Integer>();
+    public static HashMap<Integer, Integer> tlb = new HashMap<Integer, Integer>();
+    public static Queue<Integer> fifo = new LinkedList<>();
+    //private static List<Integer> fifo = new ArrayList<Integer>();
     private Integer n;
 
     public TLB(Integer pN) {
@@ -26,6 +27,24 @@ public class TLB {
     public void loopTLB() {
         for (int i = 0; i < this.n; i++) {
             System.out.println("TLB[" + i + "] = " + tlb.get(i));
+        }
+    }
+
+    // public void loopFIFO() {
+    //     for (int i = 0; i < fifo.size(); i++) {
+    //         System.out.println("FIFO[" + i + "] = " + fifo.get(i));
+    //     }
+    // }
+
+    public void ajustarTLB(Integer dirVieja) {
+        for (int i = 0; i < this.n; i++) {
+            Integer valor = tlb.get(i);
+            if (valor != null) {
+                if (valor.equals(dirVieja)) {
+                    tlb.remove(i, valor);
+                    fifo.remove(i);
+                }
+            }
         }
     }
 
@@ -60,16 +79,28 @@ public class TLB {
     public synchronized void actualizar(Integer dir, Boolean estadoRAM, Integer dirVieja) {
         Boolean hayEspacio = espacio();
         Integer cabeza = null;
+        Random rand = new Random();
+        //ajustarTLB(estadoRAM, dirVieja);
+            // if (fifo.contains(dirVieja)) {
+            //     int index = fifo.indexOf(dirVieja);
+            //     fifo.remove(index);
+            // }
+            // for (int i = 0; i < this.n; i++) {
+            //     if (tlb.get(i) == dirVieja) {
+            //         tlb.remove(i);
+            //         break;
+            //     }
+            // }
+            // for (int i = 0; i < this.n; i++) {
+            //     if (tlb.get(i) == null) {
+            //         tlb.put(i, RAM.ram.get(i));
+            //         break;
+            //     }
+            // }
+            //tlb.remove(dirVieja);
         if (hayEspacio) {
-            if (!estadoRAM) {
-                if (fifo.contains(dirVieja)) {
-                    int index = fifo.indexOf(dirVieja);
-                    cabeza = fifo.remove(index);
-                }
-                tlb.remove(dirVieja);
-            }
             for (int i = 0; i < this.n; i++) {
-                if (tlb.get(i) == null) {
+                if (tlb.get(i) == null && dir != null) {
                     tlb.put(i, dir);
                     fifo.add(i);
                     break;
@@ -77,20 +108,11 @@ public class TLB {
             }
         }
         else {
-            if (!estadoRAM) {
-                if (fifo.contains(dirVieja)) {
-                    int index = fifo.indexOf(dirVieja);
-                    cabeza = fifo.remove(index);
-                }
-                tlb.remove(dirVieja);
-            }
-            else { 
-                cabeza = fifo.remove(0); // ver y eliminar el elemento del tope de la linked list.
-            }
+            cabeza = fifo.poll();
             tlb.put(cabeza, dir); // actualiza el valor del elemento eliminado.
             fifo.add(cabeza); // vuelve a meter la dirección a la cola.
         }
-
+        //ajustarTLB(estadoRAM, dirVieja);
     }
 
 }

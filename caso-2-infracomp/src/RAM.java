@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class RAM {
 
-    private static HashMap<Integer, Integer> ram = new HashMap<Integer, Integer>();
+    public static HashMap<Integer, Integer> ram = new HashMap<Integer, Integer>();
     private static HashMap<Integer, Integer> bits = new HashMap<Integer, Integer>();
     private Integer n;
     private static Integer actDir;
@@ -71,15 +71,15 @@ public class RAM {
             for (int i = 0; i < this.n; i++) {
                 Integer valor = bits.get(i);
                 valor = valor >> 1;
-                if (Referencias.referenciadas.contains(i) && Integer.toBinaryString(valor).length() < 32) {
-                    //valor = valor ^ 1;
-                    //String s = "1" + Integer.toBinaryString(valor);
-                    //valor = Integer.parseInt(s, 2);
-                    valor = valor + (int) Math.pow(2, 32); // 2^30 es sumarle 1 a la izquierda.
-                }
+                // if (Referencias.referenciadas.contains(i)) {
+                //     //valor = valor ^ 1;
+                //     //String s = "1" + Integer.toBinaryString(valor);
+                //     //valor = Integer.parseInt(s, 2);
+                //     valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
+                // }
                 bits.put(i, valor);
             }
-            Referencias.referenciadas.clear();
+            //Referencias.referenciadas.clear();
         }
     }
 
@@ -113,7 +113,7 @@ public class RAM {
             for (int i = 0; i < this.n; i++) {
                 if (ram.get(i) == null) {
                     ram.put(i, dir);
-                    bits.put(i, 0);
+                    bits.put(dir, 0);
                     ultModDir = dir;
                     break;
                 }
@@ -130,7 +130,20 @@ public class RAM {
             }
             dirVieja = ram.get(indice);
             ram.put(indice, dir); // actualiza el valor del elemento eliminado.
-            bits.put(indice, 0); // actualiza y reinicia el bitstring del elemento eliminado.
+            bits.put(dir, 0); // actualiza y reinicia el bitstring del elemento eliminado.
+            synchronized(TLB.tlb) {
+                synchronized(TLB.fifo) {
+                    for (int i = 0; i < this.n; i++) {
+                        Integer valor = TLB.tlb.get(i);
+                        if (valor != null) {
+                            if (valor.equals(dirVieja)) {
+                                TLB.tlb.remove(i, valor);
+                                TLB.fifo.remove(i);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return dirVieja;
