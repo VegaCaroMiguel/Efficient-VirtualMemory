@@ -28,23 +28,24 @@ public class RAM {
         return bits;
     }
     
-    public void getUltDir() {
-        // for (int i = 0; i < referenciadas.size(); i++) {
-        //     System.out.println("ults: " + referenciadas.get(i));
-        // }
-        System.out.println("ultima: " + ultModDir);
-    }
-
     public Integer getAntDir() {
         return actDir;
     }
-
+    
     public void setHashBITS(HashMap<Integer, Integer> map) {
         bits = map;
     }
-
+    
     public void setActDir(Integer dir) {
         actDir = dir;
+    }
+
+    /*
+     * Funciones para imprimir estructuras
+     */
+
+    public void getUltDir() {
+        System.out.println("ultima: " + ultModDir);
     }
 
     public void loopRAM() {
@@ -61,6 +62,10 @@ public class RAM {
         }
     }
 
+    /*
+     * Lógica de la RAM
+     */
+
     /**
      * Ejecuta el algoritmo de envejecimiento.
      * Recorre la tabla de Hash de bits y hace un corrimiento a la derecha
@@ -71,15 +76,8 @@ public class RAM {
         for (int i = 0; i < this.n; i++) {
             Integer valor = bits.get(i);
             valor = valor >> 1;
-            // if (Referencias.referenciadas.contains(i)) {
-            //     //valor = valor ^ 1;
-            //     //String s = "1" + Integer.toBinaryString(valor);
-            //     //valor = Integer.parseInt(s, 2);
-            //     valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
-            // }
             bits.put(i, valor);
         }
-        //Referencias.referenciadas.clear();
     }
 
     /**
@@ -129,9 +127,11 @@ public class RAM {
                 }
                 else if (bits.get(i) == menor) {
                     indice = i;
-                    menores.add(indice);
+                    menores.add(indice); // si hay menores repetidos, los guarda en un arreglo para revisarlos.
                 }
             }
+
+            // saca un índice aleatorio entre los menores (en caso de que haya más de uno).
             Random rand = new Random();
             Integer randInt = rand.nextInt(menores.size());
             menor = menores.get(randInt);
@@ -140,9 +140,9 @@ public class RAM {
             dirVieja = ram.get(indice);
             ram.put(indice, dir); // actualiza el valor del elemento eliminado.
             bits.put(dir, 0); // actualiza y reinicia el bitstring del elemento eliminado.
-            /*
-             * Si la RAM está llena y se reemplaza un marco, se debe actualizar la TLB también.
-             */
+
+            // si la RAM está llena y se reemplaza un marco, se debe actualizar la TLB también:
+
             synchronized(TLB.fifo) {
                 synchronized(TLB.tlb) {
                     for (int i = 0; i < this.n; i++) {

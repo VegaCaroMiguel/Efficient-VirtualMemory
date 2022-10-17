@@ -45,11 +45,5 @@ public class App {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        // Integer c = 1;
-        // c = c >> 1;
-        // c = c + (int) Math.pow(2, 32);
-        // System.out.println(Integer.toBinaryString(c));
     }
-
 }

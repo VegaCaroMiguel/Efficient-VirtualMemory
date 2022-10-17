@@ -65,18 +65,12 @@ public class Referencias extends Thread {
                     this.tempCarga += this.tempTradTP;
 
                     this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                    
-                    // this.tempTrad += this.tempTradRAM;
-                    // this.tempCarga += this.tempTradRAM;
                 }
                 else { // Aseguradito no está en RAM.
                     this.numFallosPagina++;
 
                     Integer dirVieja = this.ram.actualizar(direccion);
                     Boolean hayEspacioRAM = this.ram.espacio();
-                    
-                    // this.tempTrad += this.tempTradRAM;
-                    // this.tempCarga += this.tempTradRAM;
 
                     this.tempTrad += this.tempFalloPag;
                     this.tempCarga += this.tempFalloPag;
@@ -106,7 +100,6 @@ public class Referencias extends Thread {
     public void run() {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
-            //this.tempTrad -= 3;
             try {
                 sleep(2);
             }
@@ -119,15 +112,6 @@ public class Referencias extends Thread {
         System.out.println("Fallos de página: " + this.numFallosPagina);
         System.out.println("Tiempo de traducción: " + this.tempTrad + " ns");
         System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
-        // this.ram.loopRAM();
-        // System.out.println("\n");
-        // this.tlb.loopTLB();
-        // System.out.println("\n");
-        // this.tlb.loopFIFO();
-        // System.out.println("\n");
-        // this.ram.loopBITS();
-        // System.out.println("\n");
-        //this.tp.loopTP();
     }
     
 }

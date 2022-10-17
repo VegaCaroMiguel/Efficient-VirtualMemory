@@ -2,8 +2,7 @@ import java.util.HashMap;
 
 public class TP {
     
-    private static HashMap<Integer, Boolean> tp = new HashMap<Integer, Boolean>();
-    // true es que está en RAM, false es que está en disco.
+    private static HashMap<Integer, Boolean> tp = new HashMap<Integer, Boolean>(); // true es que está en RAM, false es que está en disco.
     private Integer n;
 
     public TP(Integer pN) {
@@ -17,11 +16,19 @@ public class TP {
         return tp;
     }
 
+    /*
+     * Funciones para imprimir estructuras
+     */
+
     public void loopTP() {
         for (int i = 0; i < this.n; i++) {
             System.out.println("TP[" + i + "] = " + tp.get(i));
         }
     }
+
+    /*
+     * Lógica de la TP
+     */
 
     /**
      * Actualiza la TP. Si la dirección está en RAM, la actualiza a true. Si está en

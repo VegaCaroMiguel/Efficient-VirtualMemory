@@ -24,29 +24,19 @@ public class TLB {
         return tlb;
     }
 
+    /*
+     * Funciones para imprimir estructuras
+     */
+
     public void loopTLB() {
         for (int i = 0; i < this.n; i++) {
             System.out.println("TLB[" + i + "] = " + tlb.get(i));
         }
     }
 
-    // public void loopFIFO() {
-    //     for (int i = 0; i < fifo.size(); i++) {
-    //         System.out.println("FIFO[" + i + "] = " + fifo.get(i));
-    //     }
-    // }
-
-    public void ajustarTLB(Integer dirVieja) {
-        for (int i = 0; i < this.n; i++) {
-            Integer valor = tlb.get(i);
-            if (valor != null) {
-                if (valor.equals(dirVieja)) {
-                    tlb.remove(i, valor);
-                    fifo.remove(i);
-                }
-            }
-        }
-    }
+    /*
+     * Lógica de la TLB
+     */
 
     /**
      * Revisa si la TLB tiene espacio o no.
@@ -89,7 +79,7 @@ public class TLB {
             }
         }
         else {
-            cabeza = fifo.poll();
+            cabeza = fifo.poll(); // saca el elemento en la cabeza de la cola.
             tlb.put(cabeza, dir); // actualiza el valor del elemento eliminado.
             fifo.add(cabeza); // vuelve a meter la dirección a la cola.
         }
