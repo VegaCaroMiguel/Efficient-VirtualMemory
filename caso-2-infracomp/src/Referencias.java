@@ -60,14 +60,14 @@ public class Referencias extends Thread {
                 Boolean estaTP = this.tp.getHashTP().get(direccion);
                 Boolean estaRAM = this.ram.getHashRAM().containsValue(direccion);
                 
-                this.tempTrad += this.tempTradTP;
-                this.tempCarga += this.tempTradTP;
                 if (estaTP && estaRAM) { // ¿Está en RAM?
+                    this.tempTrad += this.tempTradTP;
+                    this.tempCarga += this.tempTradTP;
 
                     this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
                     
                     // this.tempTrad += this.tempTradRAM;
-                    this.tempCarga += this.tempTradRAM;
+                    // this.tempCarga += this.tempTradRAM;
                 }
                 else { // Aseguradito no está en RAM.
                     this.numFallosPagina++;
@@ -75,7 +75,10 @@ public class Referencias extends Thread {
                     Integer dirVieja = this.ram.actualizar(direccion);
                     Boolean hayEspacioRAM = this.ram.espacio();
                     
-                    // this.tempTrad += this.tempFalloPag;
+                    // this.tempTrad += this.tempTradRAM;
+                    // this.tempCarga += this.tempTradRAM;
+
+                    this.tempTrad += this.tempFalloPag;
                     this.tempCarga += this.tempFalloPag;
 
                     this.tp.actualizar(direccion, hayEspacioRAM, dirVieja);
@@ -84,8 +87,6 @@ public class Referencias extends Thread {
                     
                     this.tempCarga += this.tempArregloFallPag;
 
-                    this.tempTrad += this.tempTradRAM;
-                    this.tempCarga += this.tempTradRAM;
                 }
             }
             referenciadas.add(direccion);
