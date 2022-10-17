@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class RAM {
 
@@ -65,22 +67,19 @@ public class RAM {
      * de cada secuencia de bits. El menor valor en Integer que se encuentre
      * es el que se debe sacar en caso de que no haya espacio en RAM.
      */
-    public void envejecimiento() {
-        synchronized(Referencias.referenciadas) {
-            //System.out.println("Envejecimiento");
-            for (int i = 0; i < this.n; i++) {
-                Integer valor = bits.get(i);
-                valor = valor >> 1;
-                // if (Referencias.referenciadas.contains(i)) {
-                //     //valor = valor ^ 1;
-                //     //String s = "1" + Integer.toBinaryString(valor);
-                //     //valor = Integer.parseInt(s, 2);
-                //     valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
-                // }
-                bits.put(i, valor);
-            }
-            //Referencias.referenciadas.clear();
+    public synchronized void envejecimiento() {
+        for (int i = 0; i < this.n; i++) {
+            Integer valor = bits.get(i);
+            valor = valor >> 1;
+            // if (Referencias.referenciadas.contains(i)) {
+            //     //valor = valor ^ 1;
+            //     //String s = "1" + Integer.toBinaryString(valor);
+            //     //valor = Integer.parseInt(s, 2);
+            //     valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
+            // }
+            bits.put(i, valor);
         }
+        //Referencias.referenciadas.clear();
     }
 
     /**
@@ -120,6 +119,7 @@ public class RAM {
             }
         }
         else {
+            ArrayList<Integer> menores = new ArrayList<Integer>();
             Integer menor = Integer.MAX_VALUE;
             Integer indice = 0;
             for (int i = 0; i < this.n; i++) {
@@ -127,12 +127,24 @@ public class RAM {
                     menor = bits.get(i); // busca cuál es el menor. El Integer menor es el menos usado hasta es momento.
                     indice = i; // guarda el índice del menor.
                 }
+                else if (bits.get(i) == menor) {
+                    indice = i;
+                    menores.add(indice);
+                }
             }
+            Random rand = new Random();
+            Integer randInt = rand.nextInt(menores.size());
+            menor = menores.get(randInt);
+            indice = menores.indexOf(menor);
+
             dirVieja = ram.get(indice);
             ram.put(indice, dir); // actualiza el valor del elemento eliminado.
             bits.put(dir, 0); // actualiza y reinicia el bitstring del elemento eliminado.
-            synchronized(TLB.tlb) {
-                synchronized(TLB.fifo) {
+            /*
+             * Si la RAM está llena y se reemplaza un marco, se debe actualizar la TLB también.
+             */
+            synchronized(TLB.fifo) {
+                synchronized(TLB.tlb) {
                     for (int i = 0; i < this.n; i++) {
                         Integer valor = TLB.tlb.get(i);
                         if (valor != null) {

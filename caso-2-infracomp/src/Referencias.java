@@ -17,7 +17,7 @@ public class Referencias extends Thread {
     private final Integer tempTradTLB = 2;
     private final Integer tempTradTP = 30;
     private final Integer tempFalloPag = tempTradTP * 2;
-    private final Integer tempTradPag = 30;
+    private final Integer tempTradRAM = 30;
     private final Integer tempArregloFallPag = 10000000;
 
 
@@ -25,7 +25,7 @@ public class Referencias extends Thread {
         this.tlb = pTlb;
         this.ram = pRam;
         this.tp = pTp;
-        this.direcciones = pDirecciones; // mark down
+        this.direcciones = pDirecciones;
     }
 
     /**
@@ -60,14 +60,14 @@ public class Referencias extends Thread {
                 Boolean estaTP = this.tp.getHashTP().get(direccion);
                 Boolean estaRAM = this.ram.getHashRAM().containsValue(direccion);
                 
+                this.tempTrad += this.tempTradTP;
+                this.tempCarga += this.tempTradTP;
                 if (estaTP && estaRAM) { // ¿Está en RAM?
-                    this.tempTrad += this.tempTradTP;
-                    this.tempCarga += this.tempTradTP;
 
-                    this.tlb.actualizar(direccion, true, null); // ¡actualizar es algoritmo FIFO!
+                    this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
                     
-                    this.tempTrad += this.tempTradPag;
-                    this.tempCarga += this.tempTradPag;
+                    // this.tempTrad += this.tempTradRAM;
+                    this.tempCarga += this.tempTradRAM;
                 }
                 else { // Aseguradito no está en RAM.
                     this.numFallosPagina++;
@@ -75,21 +75,24 @@ public class Referencias extends Thread {
                     Integer dirVieja = this.ram.actualizar(direccion);
                     Boolean hayEspacioRAM = this.ram.espacio();
                     
-                    this.tempTrad += this.tempFalloPag;
+                    // this.tempTrad += this.tempFalloPag;
                     this.tempCarga += this.tempFalloPag;
 
                     this.tp.actualizar(direccion, hayEspacioRAM, dirVieja);
                     
-                    this.tlb.actualizar(direccion, hayEspacioRAM, dirVieja); // ¡actualizar es algoritmo FIFO!
+                    this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
                     
                     this.tempCarga += this.tempArregloFallPag;
+
+                    this.tempTrad += this.tempTradRAM;
+                    this.tempCarga += this.tempTradRAM;
                 }
             }
             referenciadas.add(direccion);
             for (int i = 0; i < this.ram.getHashRAM().size(); i++) {
                 Integer valor = this.ram.getHashRAM().get(i);
                 if (valor.equals(direccion)) {
-                    valor = valor + (int) Math.pow(2, 30); // 2^30 es sumarle 1 a la izquierda.
+                    valor = valor + (int) Math.pow(2, 30); // 2^30 es "sumarle" 1 a la izquierda.
                     //valor = valor ^ 1;
                     //String s = "1" + Integer.toBinaryString(valor);
                     //valor = Integer.parseInt(s, 2);
@@ -102,11 +105,7 @@ public class Referencias extends Thread {
     public void run() {
         for (int i = 0; i < this.direcciones.size(); i++) {
             validarReferencias(this.direcciones.get(i));
-            this.tempTrad -= 3;
-            // this.ram.loopRAM();
-            // System.out.println("\n");
-            // this.tlb.loopTLB();
-            // System.out.println("\n");
+            //this.tempTrad -= 3;
             try {
                 sleep(2);
             }
@@ -119,10 +118,10 @@ public class Referencias extends Thread {
         System.out.println("Fallos de página: " + this.numFallosPagina);
         System.out.println("Tiempo de traducción: " + this.tempTrad + " ns");
         System.out.println("Tiempo de carga: " + this.tempCarga + " ns");
-        this.ram.loopRAM();
-        System.out.println("\n");
-        this.tlb.loopTLB();
-        System.out.println("\n");
+        // this.ram.loopRAM();
+        // System.out.println("\n");
+        // this.tlb.loopTLB();
+        // System.out.println("\n");
         // this.tlb.loopFIFO();
         // System.out.println("\n");
         // this.ram.loopBITS();

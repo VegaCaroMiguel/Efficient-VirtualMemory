@@ -76,28 +76,9 @@ public class TLB {
      * @param estadoRAM : true si RAM tiene espacio, falso si no.
      * @param dirVieja : dirección de la página que se acaba de reemplazar en RAM (si es el caso).
      */
-    public synchronized void actualizar(Integer dir, Boolean estadoRAM, Integer dirVieja) {
+    public synchronized void actualizar(Integer dir) {
         Boolean hayEspacio = espacio();
         Integer cabeza = null;
-        Random rand = new Random();
-        //ajustarTLB(estadoRAM, dirVieja);
-            // if (fifo.contains(dirVieja)) {
-            //     int index = fifo.indexOf(dirVieja);
-            //     fifo.remove(index);
-            // }
-            // for (int i = 0; i < this.n; i++) {
-            //     if (tlb.get(i) == dirVieja) {
-            //         tlb.remove(i);
-            //         break;
-            //     }
-            // }
-            // for (int i = 0; i < this.n; i++) {
-            //     if (tlb.get(i) == null) {
-            //         tlb.put(i, RAM.ram.get(i));
-            //         break;
-            //     }
-            // }
-            //tlb.remove(dirVieja);
         if (hayEspacio) {
             for (int i = 0; i < this.n; i++) {
                 if (tlb.get(i) == null && dir != null) {
@@ -112,7 +93,6 @@ public class TLB {
             tlb.put(cabeza, dir); // actualiza el valor del elemento eliminado.
             fifo.add(cabeza); // vuelve a meter la dirección a la cola.
         }
-        //ajustarTLB(estadoRAM, dirVieja);
     }
 
 }
