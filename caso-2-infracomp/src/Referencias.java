@@ -49,49 +49,47 @@ public class Referencias extends Thread {
      */
     public void validarReferencias(Integer direccion) {
         
-        synchronized(referenciadas) {
-            Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
+        Boolean estaTLB = this.tlb.getHashTLB().containsValue(direccion);
             
-            if (estaTLB) { // ¿Está en TLB?
-                this.tempTrad += this.tempTradTLB;
-                this.tempCarga += this.tempTradTLB;
+        if (estaTLB) { // ¿Está en TLB?
+            this.tempTrad += this.tempTradTLB;
+            this.tempCarga += this.tempTradTLB;
+        }
+        else {
+            Boolean estaTP = this.tp.getHashTP().get(direccion);
+            
+            if (estaTP) { // ¿Está en RAM?
+                this.tempTrad += this.tempTradTP;
+                this.tempCarga += this.tempTradTP;
+
+                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
             }
-            else {
-                Boolean estaTP = this.tp.getHashTP().get(direccion);
+            else { // Aseguradito no está en RAM.
+                this.numFallosPagina++;
+
+                Integer dirVieja = this.ram.actualizar(direccion);
+                Boolean hayEspacioRAM = this.ram.espacio();
+
+                this.tempTrad += this.tempFalloPag;
+                this.tempCarga += this.tempFalloPag;
+
+                this.tp.actualizar(direccion, hayEspacioRAM, dirVieja);
                 
-                if (estaTP) { // ¿Está en RAM?
-                    this.tempTrad += this.tempTradTP;
-                    this.tempCarga += this.tempTradTP;
+                this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
+                
+                this.tempCarga += this.tempArregloFallPag;
 
-                    this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                }
-                else { // Aseguradito no está en RAM.
-                    this.numFallosPagina++;
-
-                    Integer dirVieja = this.ram.actualizar(direccion);
-                    Boolean hayEspacioRAM = this.ram.espacio();
-
-                    this.tempTrad += this.tempFalloPag;
-                    this.tempCarga += this.tempFalloPag;
-
-                    this.tp.actualizar(direccion, hayEspacioRAM, dirVieja);
-                    
-                    this.tlb.actualizar(direccion); // ¡actualizar es algoritmo FIFO!
-                    
-                    this.tempCarga += this.tempArregloFallPag;
-
-                }
             }
-            referenciadas.add(direccion);
-            for (int i = 0; i < this.ram.getHashRAM().size(); i++) {
-                Integer valor = this.ram.getHashRAM().get(i);
-                if (valor.equals(direccion)) {
-                    valor = valor + (int) Math.pow(2, 30); // 2^30 es "sumarle" 1 a la izquierda.
-                    //valor = valor ^ 1;
-                    //String s = "1" + Integer.toBinaryString(valor);
-                    //valor = Integer.parseInt(s, 2);
-                    break;
-                }
+        }
+
+        for (int i = 0; i < this.ram.getHashBITS().size(); i++) {
+            Integer valor = this.ram.getHashBITS().get(i);
+            if ((i == direccion) && valor != null) {
+                valor = valor + (int) Math.pow(2, 30); // 2^30 es "sumarle" 1 a la izquierda.
+                //valor = valor ^ 1;
+                //String s = "1" + Integer.toBinaryString(valor);
+                //valor = Integer.parseInt(s, 2);
+                break;
             }
         }
     }
