@@ -1,15 +1,11 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.Random;
 
 public class TLB {
 
     public static HashMap<Integer, Integer> tlb = new HashMap<Integer, Integer>();
     public static Queue<Integer> fifo = new LinkedList<>();
-    //private static List<Integer> fifo = new ArrayList<Integer>();
     private Integer n;
 
     public TLB(Integer pN) {

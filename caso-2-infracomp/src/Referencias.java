@@ -17,7 +17,7 @@ public class Referencias extends Thread {
     private final Integer tempTradTLB = 2;
     private final Integer tempTradTP = 30;
     private final Integer tempFalloPag = tempTradTP * 2;
-    private final Integer tempTradRAM = 30;
+    //private final Integer tempTradRAM = 30;
     private final Integer tempArregloFallPag = 10000000;
 
 
@@ -58,9 +58,8 @@ public class Referencias extends Thread {
             }
             else {
                 Boolean estaTP = this.tp.getHashTP().get(direccion);
-                Boolean estaRAM = this.ram.getHashRAM().containsValue(direccion);
                 
-                if (estaTP && estaRAM) { // ¿Está en RAM?
+                if (estaTP) { // ¿Está en RAM?
                     this.tempTrad += this.tempTradTP;
                     this.tempCarga += this.tempTradTP;
 

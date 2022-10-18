@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class RAM {
@@ -8,9 +7,6 @@ public class RAM {
     public static HashMap<Integer, Integer> ram = new HashMap<Integer, Integer>();
     private static HashMap<Integer, Integer> bits = new HashMap<Integer, Integer>();
     private Integer n;
-    private static Integer actDir;
-    private static Integer ultModDir;
-    //private static ArrayList<Integer> referenciadas = new ArrayList<Integer>();
 
     public RAM(Integer pN) {
         this.n = pN;
@@ -27,26 +23,14 @@ public class RAM {
     public HashMap<Integer, Integer> getHashBITS() {
         return bits;
     }
-    
-    public Integer getAntDir() {
-        return actDir;
-    }
-    
+        
     public void setHashBITS(HashMap<Integer, Integer> map) {
         bits = map;
-    }
-    
-    public void setActDir(Integer dir) {
-        actDir = dir;
     }
 
     /*
      * Funciones para imprimir estructuras
      */
-
-    public void getUltDir() {
-        System.out.println("ultima: " + ultModDir);
-    }
 
     public void loopRAM() {
         for (int i = 0; i < ram.size(); i++) {
@@ -111,7 +95,6 @@ public class RAM {
                 if (ram.get(i) == null) {
                     ram.put(i, dir);
                     bits.put(dir, 0);
-                    ultModDir = dir;
                     break;
                 }
             }
